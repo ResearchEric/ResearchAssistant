@@ -1,12 +1,19 @@
 import re
 from typing import Dict, List
+import os
+from dotenv import load_dotenv
 
 from openai_call import openai_call
 
+load_dotenv()
+
 
 def context_agent(
-    objective: str, task_list: List[Dict[str, str]], context: str, subject: str
-) -> Dict[str, str]:
+    task_list: List[Dict[str, str]]
+) -> List[Dict[str, str]]:
+    objective = os.getenv("OBJECTIVE")
+    context = os.getenv("CONTEXT")
+    subject = os.getenv("SUBJECT")
 
     task_descriptions = "\n".join(
         [f"{i+1}. {task['task_name']}" for i, task in enumerate(task_list)])

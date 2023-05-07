@@ -1,51 +1,68 @@
-import os
-import time
-from typing import List
-from dotenv import load_dotenv
-from task_manager import TaskManager
+from typing import Dict, List
+from agents.context_agent import context_agent
+from agents.execution_agent import execution_agent
+from agents.html_documentation_agent import html_documentation_agent
+from storage.task_manager import load_tasks, save_tasks, save_context_mapping, save_execution_report, save_html_documentation
 
 
-SAVE_AND_EXIT = "s"
-EXIT_WITHOUT_SAVING = "e"
-
-
-def main() -> None:
-    load_dotenv()
-
-    OBJECTIVE = os.getenv(
-        "OBJECTIVE", "This is a user prompt that will spawn a task list based off agent behavior")
-    INITIAL_TASK = os.getenv("INITIAL_TASK", "Develop a task list")
-
-    task_list: List[dict] = [{"task_name": INITIAL_TASK}]
-    task_manager = TaskManager()
-
+def main():
     while True:
-        print_task_list(task_list)
+        print("\n----------------------- Task List -----------------------")
+        task_list = load_tasks()
+        for i, task in enumerate(task_list):
+            print(f"{i + 1}. {task['task_name']}")
+
+        print("Enter 'c' to generate context mapping.")
+        print("Enter 'e' to generate execution report.")
+        print("Enter 'h' to generate html documentation.")
+        print("Enter 's' to save and exit.")
+        print("Enter 'e' to exit without saving.")
+        print("Enter a number to automatically process tasks for X hours.")
 
         user_input = input("Enter your action: ")
 
         if user_input.isdigit():
             hours = float(user_input)
-            task_manager.process_tasks_for_x_hours(task_list, OBJECTIVE, hours)
-        elif user_input == SAVE_AND_EXIT:
-            task_manager.save_and_exit(task_list)
+            # call the process_tasks_for_x_hours function from the task_manager module
+            task_list = process_tasks_for_x_hours(task_list, hours)
+
+        elif user_input == "c":
+            objective = input("Enter the objective of the project: ")
+            context = input("Enter the current context of the project: ")
+            subject = input("Enter the subject of the project: ")
+            # call the context_agent function from the agents module
+            context_mapping = context_agent(
+                objective, task_list, context, subject)
+            # call the save_context_mapping function from the task_manager module
+            save_context_mapping(context_mapping)
+
+        elif user_input == "e":
+            task_id = input("Enter the ID of the task to execute: ")
+            task = get_task_by_id(task_list, task_id)
+            # call the execution_agent function from the agents module
+            execution_report = execution_agent(task)
+            # call the save_execution_report function from the task_manager module
+            save_execution_report(execution_report)
+
+        elif user_input == "h":
+            objective = input("Enter the objective of the project: ")
+            context = input("Enter the current context of the project: ")
+            # call the html_documentation_agent function from the agents module
+            html_doc = html_documentation_agent(objective, context, task_list)
+            # call the save_html_documentation function from the task_manager module
+            save_html_documentation(html_doc)
+
+        elif user_input == "s":
+            # call the save_tasks function from the task_manager module
+            save_tasks(task_list)
             break
-        elif user_input == EXIT_WITHOUT_SAVING:
-            task_manager.exit_without_saving()
+
+        elif user_input == "e":
+            exit_without_saving()
             break
+
         else:
-            task_manager.process_tasks(task_list, OBJECTIVE)
-
-
-def print_task_list(task_list: List[dict]) -> None:
-    print("\n----------------------- Task List -----------------------")
-    for i, task in enumerate(task_list):
-        print(f"{i + 1}. {task['task_name']}")
-
-    hours = 0  # Replace with actual value
-    print(f"Enter a number to automatically process tasks for {hours} hours.")
-    print(f"Enter '{SAVE_AND_EXIT}' to save and exit.")
-    print(f"Enter '{EXIT_WITHOUT_SAVING}' to exit without saving.")
+            print("Invalid input, please try again.")
 
 
 if __name__ == "__main__":
