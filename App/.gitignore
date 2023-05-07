@@ -1,0 +1,18 @@
+# Compiled files
+*.pyc
+
+# Temporary files
+*.swp
+*.swo
+
+# Local env files
+.env
+
+# Dependency directories
+venv/
+__pycache__/
+
+# Log files
+*.log
+
+# Other project specific files/directories
