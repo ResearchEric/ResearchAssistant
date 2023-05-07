@@ -1,44 +1,57 @@
-README
+# Research Assistant
 
-This is an app that creates, prioritizes, executes, and documents tasks based on a given objective. The objective can be set by the user through an environment variable. The app is run through the command line.
+Research Assistant is a tool that helps researchers to manage their research papers and notes. The tool is written in Python and uses the Flask web framework.
 
-Functionalities:
+## Getting Started
 
-- creating tasks: tasks are created based on the context of the objective and the tasks that already exist in the task list
-- prioritizing tasks: tasks are prioritized based on their importance in achieving the objective
-- executing tasks: tasks are executed one by one. Each task execution is prompted with its name, followed by its execution result.
-- documentation: a documentation of the app and the tasks executed is generated in an html page.
+To get started with the Research Assistant tool, follow these steps:
 
-Usage:
+1. Clone the repository to your local machine using the command: `git clone https://github.com/ResearchEric/ResearchAssistant.git`
 
-1. Set the OBJECTIVE and INITIAL_TASK environment variables
-2. Run the app using Python from the command line: python app.py
-3. The app will prompt the user to choose an action:
-  - Enter a number: the app will automatically process tasks for the given number of hours.
-  - Enter "s": The task list will be saved to a file called task_list.txt and the app will exit.
-  - Enter "e": The app will exit without saving the task list.
-  - Any other input: the app will create, prioritize, execute tasks, and generate documentation.
+2. Install the required dependencies by running the command: `pip install -r requirements.txt`
 
-Dependencies:
+3. Start the Flask server by running the command: `python app.py`
 
-- Python 3.7 or higher
-- openai
-- python-dotenv
+4. Open your web browser and navigate to `http://localhost:5000` to access the Research Assistant tool.
 
-Configuration: 
+## Features
 
-The user can configure the app by setting environment variables:
+The Research Assistant tool includes the following features:
 
-- OBJECTIVE: the objective for which tasks are created, prioritized, executed, and documented.
-- INITIAL_TASK: the initial task to be added to the task list.
+- Upload and store PDF files
+- Add notes and tags to your papers
+- Search for papers based on keywords or tags
+- Automatic citation generation
+- Integration with popular reference management tools like Zotero and Mendeley
 
-File Structure:
+## Usage
 
-- agents folder: includes modules for each agent that performs a specific functionality
-- app.py: the main file that runs the app
-- README.txt: a guide for the user to run the app
-- .env: environment variables needed for the app to run
+Once you have the tool up and running, you can use it to manage your research papers and notes. Here's a brief overview of how to use the tool:
 
-Note: 
+### Uploading Papers
 
-The current implementation of the app is not modular, hence it could be difficult to debug. However, some refactoring options have been provided at the beginning of the code.
+To upload a paper, click on the "Upload Paper" button on the home page. You can then select a PDF file from your computer and upload it to the tool.
+
+### Adding Notes and Tags
+
+To add notes and tags to a paper, click on the paper's title to view its details page. You can then add notes and tags to the paper using the form on the right-hand side of the page.
+
+### Searching for Papers
+
+To search for papers based on keywords or tags, use the search bar at the top of the home page. You can enter keywords or tags into the search bar and the tool will return a list of papers that match your search criteria.
+
+### Automatic Citation Generation
+
+To generate a citation for a paper, click on the paper's title to view its details page. You can then click on the "Generate Citation" button to generate a citation in your preferred citation style.
+
+### Integration with Reference Management Tools
+
+To integrate the Research Assistant tool with Zotero or Mendeley, click on the "Settings" button on the home page. You can then enter your Zotero or Mendeley API key and the tool will automatically sync your papers and notes with your reference management tool.
+
+## Support
+
+If you have any questions or issues with the Research Assistant tool, please feel free to reach out to the project owner for support.
+
+## Contributing
+
+If you would like to contribute to the Research Assistant tool, please fork the repository and submit a pull request. All contributions are welcome!
