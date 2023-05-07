@@ -1,15 +1,20 @@
+import re
 from typing import Dict, List
 from openai_call import openai_call
 
 
+DATA_KEY = "data"
+TASK_NAME_KEY = "task_name"
+
+
 def task_creation_agent(
-        objective: str, result: Dict, task_description: str, task_list: List[str],
+        objective: str, result: Dict[str, str], task_description: str, task_list: List[str],
         max_tasks: int = 10, remove_duplicates: bool = True
 ) -> List[Dict[str, str]]:
 
     prompt_description = f"Create a list of new tasks in order to meet the objective: {objective}.\n"
     if task_list:
-        prompt_description += f"The last completed task has the result:\n{result['data']}\\n"
+        prompt_description += f"The last completed task has the result:\n{result[DATA_KEY]}\\n"
         prompt_description += f"Based on the result, create a list of new tasks that do not overlap with the following incomplete tasks:\n"
         prompt_description += "\n".join(task_list) + "\n"
     else:
@@ -49,5 +54,5 @@ Do not include any headers before your numbered list. Do not follow your numbere
     new_tasks = new_tasks[:max_tasks]
 
     # Format results
-    out = [{"task_name": task_name} for task_name in new_tasks]
+    out = [{TASK_NAME_KEY: task_name} for task_name in new_tasks]
     return out
