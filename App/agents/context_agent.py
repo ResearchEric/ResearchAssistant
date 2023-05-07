@@ -2,8 +2,8 @@ import re
 from typing import Dict, List
 import os
 from dotenv import load_dotenv
+from agents.openai_call import openai_call
 
-from openai_call import openai_call
 
 load_dotenv()
 

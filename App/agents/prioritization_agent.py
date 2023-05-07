@@ -1,29 +1,20 @@
 from typing import Dict, List
-from openai_call import openai_call
 
+PRIORITY_KEY = "priority"
 TASK_NAME_KEY = "task_name"
 
 
-def prioritization_agent(objective: str, task_list: List[Dict[str, str]], priorities: Dict[str, str]) -> List[Dict[str, str]]:
-    task_descriptions = "\n".join([f"{i+1}. {task[TASK_NAME_KEY]}" for i, task in enumerate(task_list)])
-    priority_descriptions = "\n".join([f"- {k}: {v}" for k, v in priorities.items()])
+def prioritization_agent(task_list: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    # Assign priority to each task based on its position in the list
+    for i, task in enumerate(task_list):
+        task[PRIORITY_KEY] = i
 
-    # Use f-strings to format the prompt string
-    prompt = f"""
-You are a prioritization agent. Your objective is to prioritize the following tasks, based on the main objective and the priorities provided.
-Objective: {objective}
-Tasks:
-{task_descriptions}
-Priorities:
-{priority_descriptions}
-Rank the tasks from most important to least important. Return your response in the following format:
-{"".join([f"\n{i+1}. " + "{" + f"{task[TASK_NAME_KEY]}" + "}" for i, task in enumerate(task_list)])}
-"""
+    # Sort tasks by priority in ascending order
+    sorted_tasks = sorted(task_list, key=lambda x: x[PRIORITY_KEY])
 
-    # Call openai API to get response
-    response = openai_call(prompt, max_tokens=2000)
+    # Remove priority key from tasks
+    for task in sorted_tasks:
+        del task[PRIORITY_KEY]
 
-    # Use list comprehension and one liner to parse output
-    prioritized_task_list = [{TASK_NAME_KEY: task.strip().split('. ')[1]} for task in response.strip().split('\n')]
-
-    return prioritized_task_list
+    # Return sorted tasks
+    return sorted_tasks
